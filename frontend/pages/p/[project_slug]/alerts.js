@@ -1,10 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import Layout from '../../../components/Layout'
 
 function ProjectPage(props) {
-  const { url } = props
-  const { project_slug } = url.query
+  const router = useRouter()
+  const { project_slug } = router.query
   return (
     <Layout>
       <p><Link href='../../dashboard'><a>List of all projects</a></Link></p>
@@ -14,7 +15,6 @@ function ProjectPage(props) {
         {' | '}
         <b>Alerts</b>
       </p>
-    <pre>{JSON.stringify(props, null, 2)}</pre>
     </Layout>
   )
 }
