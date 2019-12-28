@@ -2,21 +2,32 @@ import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Layout from '../components/Layout'
+import ErrorMessage from '../components/ErrorMessage'
+import ProjectMenu from '../components/ProjectMenu'
+import useFetch from '../lib/useFetch'
 
-function ProjectPage(props) {
+function AlertPage(props) {
   const router = useRouter()
   const projectId = router.query.p
   return (
     <Layout>
       <p><Link href='/dashboard'><a>List of all projects</a></Link></p>
-      <h1>Project {projectId}: Alerts</h1>
-      <p>
-        <Link href={{ pathname: '/checks', query: { p: projectId } }}><a>Checks</a></Link>
-        {' | '}
-        <b>Alerts</b>
-      </p>
+      {projectId && <ProjectAlerts projectId={projectId} />}
     </Layout>
   )
 }
 
-export default ProjectPage
+function ProjectAlerts({ projectId }) {
+  const [ data, error ] = useFetch(`/api/project?projectId=${projectId}`)
+  if (error) return <ErrorMessage title='Failed to load project' error={error} />
+  if (!data) return null
+  const { project } = data
+  return (
+    <>
+      <h1>{project.name}</h1>
+      <ProjectMenu activeItem='alerts' projectId={projectId} />
+    </>
+  )
+}
+
+export default AlertPage

@@ -4,14 +4,20 @@ import Layout from '../components/Layout'
 import ErrorMessage from '../components/ErrorMessage'
 import useFetch from '../lib/useFetch'
 
+function DashboardPage() {
+  return (
+    <Layout>
+      <h1>Dashboard</h1>
+      <p>Projects:</p>
+      <ProjectList />
+    </Layout>
+  )
+}
+
 function ProjectList() {
   const [ data, error ] = useFetch('/api/projects')
-  if (error) {
-    return <ErrorMessage title='Failed to load projects' error={error} />
-  }
-  if (!data) {
-    return null
-  }
+  if (error) return <ErrorMessage title='Failed to load projects' error={error} />
+  if (!data) return null
   const { projects } = data
   return (
     <ul>
@@ -21,16 +27,6 @@ function ProjectList() {
         </li>
       ))}
     </ul>
-  )
-}
-
-function DashboardPage() {
-  return (
-    <Layout>
-      <h1>Dashboard</h1>
-      <p>Projects:</p>
-      <ProjectList />
-    </Layout>
   )
 }
 
