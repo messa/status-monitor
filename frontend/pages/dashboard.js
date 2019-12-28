@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import fetch from 'isomorphic-unfetch'
 import Layout from '../components/Layout'
 import ErrorMessage from '../components/ErrorMessage'
 import useFetch from '../lib/useFetch'
@@ -11,7 +10,7 @@ function ProjectList() {
     return <ErrorMessage title='Failed to load projects' error={error} />
   }
   if (!data) {
-    return <p><em>Loading</em></p>
+    return null
   }
   const { projects } = data
   return (
