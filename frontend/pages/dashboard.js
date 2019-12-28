@@ -8,8 +8,8 @@ function DashboardPage() {
       <h1>Dashboard</h1>
       <p>Projects:</p>
       <ul>
-        <li><Link href={`/p/foo/checks`}><a>Foo</a></Link></li>
-        <li><Link href={`/p/bar/checks`}><a>Bar</a></Link></li>
+        <li><Link href={{ pathname: '/checks', query: { p: 'foo' } }}><a>Foo</a></Link></li>
+        <li><Link href={{ pathname: '/checks', query: { p: 'bar' } }}><a>Bar</a></Link></li>
       </ul>
     </Layout>
   )
