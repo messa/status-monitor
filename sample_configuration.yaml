@@ -1,0 +1,15 @@
+#log_file: status_monitor.log
+google_oauth:
+  client_id: 123456-bflmpsvz.apps.googleusercontent.com
+  client_secret: xxx
+  redirect_uri: https://status-monitor.example.com/api/auth/google-callback
+projects:
+- id: demo
+  name: Demo
+  allow_email: []
+  allow_email_regex:
+  - ".*@gmail.com"
+  checks:
+  - url: https://ip.messa.cz/
+  - url: https://image-url-preview.now.sh/
+    must_contain: "Example:"

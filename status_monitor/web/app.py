@@ -3,6 +3,7 @@ from pathlib import Path
 import re
 
 from .api import routes as api_routes
+from .auth import routes as auth_routes
 
 
 routes = web.RouteTableDef()
