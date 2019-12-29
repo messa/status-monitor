@@ -9,6 +9,7 @@ function useFetch(url, options) {
     const fetchData = async function() {
       try {
         const res = await fetch(url, options)
+        if (res.status != 200) throw new Error(`Received status ${res.status}`)
         const json = await res.json()
         setData(json)
       } catch (error) {
