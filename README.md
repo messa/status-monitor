@@ -3,7 +3,8 @@ Status monitor
 
 A web app that monitors HTTP and TCP endpoints and creates PagerDuty alerts and Slack notifications when something goes wrong.
 
-Tech stack:
+Tech stack
+----------
 
 🐍 Python async **aiohttp** backend (a long running process; sorry, no serverless 🙂) \
 🌈 **Next.js** frontend (statically exported HTML + JS files served by Python backend) \
