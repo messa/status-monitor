@@ -8,6 +8,7 @@ from signal import SIGTERM
 import sys
 
 from .configuration import get_configuration
+from .model import get_model
 from .web.app import get_app
 
 
@@ -40,7 +41,7 @@ def status_monitor_main():
         sys.exit(f'ERROR: {e!r}')
 
 
-log_format = '%(asctime)s %(name)-25s %(levelname)5s: %(message)s'
+log_format = '%(asctime)s %(name)-27s %(levelname)5s: %(message)s'
 
 
 def setup_logging(verbose):
@@ -65,8 +66,10 @@ async def async_main(conf):
     loop = get_running_loop()
     term_event = asyncio.Event()
     loop.add_signal_handler(SIGTERM, term_event.set)
+    model = get_model()
     app = get_app()
     app['conf'] = conf
+    app['model'] = model
     web_task = create_task(run_app(app, term_event))
     await web_task
 

@@ -48,6 +48,7 @@ class Configuration:
         self.log_file = cfg_path / cfg['log_file'] if cfg.get('log_file') else None
         self.google_oauth = GoogleOAuth(cfg['google_oauth'])
         self.projects = [Project(p) for p in cfg['projects']]
+        self.session_cookie_name = cfg.get('session_cookie_name', 'STATUS_MONITOR_SESSION')
 
     def get_project_by_id(self, project_id):
         for p in self.projects:
@@ -65,6 +66,7 @@ class GoogleOAuth:
     def __init__(self, cfg):
         self.client_id = cfg['client_id']
         self.client_secret = cfg['client_secret']
+        self.redirect_uri = cfg['redirect_uri']
 
 
 class Project:

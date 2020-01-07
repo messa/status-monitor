@@ -1,0 +1,6 @@
+aiohttp
+requests
+requests_oauthlib
+pyyaml
+simplejson
+sqlalchemy

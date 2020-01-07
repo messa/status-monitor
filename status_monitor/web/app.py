@@ -37,4 +37,5 @@ def get_app():
     app = web.Application()
     app.add_routes(routes)
     app.add_routes(api_routes)
+    app.add_routes(auth_routes)
     return app
