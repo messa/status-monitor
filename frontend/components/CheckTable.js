@@ -14,13 +14,20 @@ function CheckTable({ projectId }) {
           <tr>
             <th>Id</th>
             <th>URL</th>
+            <th>Status</th>
+            <th>Last check date</th>
           </tr>
-          {checks.map(check => (
-            <tr key={check.id}>
-              <td><code>{check.id}</code></td>
-              <td><code>{check.url}</code></td>
-            </tr>
-          ))}
+          {checks.map(checkWithStatus => {
+            const { check, current_status } = checkWithStatus
+            return (
+              <tr key={check.id}>
+                <td><code>{check.id}</code></td>
+                <td><code>{check.url}</code></td>
+                <td><code>{current_status.color || '-'}</code></td>
+                <td><code>{current_status.last_check_date || '-'}</code></td>
+              </tr>
+            )
+          })}
         </table>
       )}
       {/*<pre>{JSON.stringify(checks)}</pre>*/}

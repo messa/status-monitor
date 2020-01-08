@@ -66,7 +66,7 @@ async def async_main(conf):
     loop = get_running_loop()
     term_event = asyncio.Event()
     loop.add_signal_handler(SIGTERM, term_event.set)
-    model = get_model()
+    model = get_model(conf=conf)
     app = get_app()
     app['conf'] = conf
     app['model'] = model

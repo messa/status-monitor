@@ -3,7 +3,7 @@ from aiohttp.web import RouteTableDef, json_response
 from pathlib import Path
 import re
 
-from .helpers import get_session, get_user, check_user
+from .helpers import get_session, get_user, check_user, get_model
 
 
 routes = RouteTableDef()
@@ -55,10 +55,17 @@ async def project_handler(request):
 async def checks_handler(request):
     await check_user(request)
     project_id = request.url.query['projectId']
-    conf = request.app['conf']
-    project = conf.get_project_by_id(project_id)
+    cwses = await get_model(request).checks.list_checks_with_statuses(project_id=project_id)
     return json_response({
-        'checks': _export_checks(project),
+        'checks': [
+            {
+                'check': _export_check(cws.check),
+                'current_status': {
+                    'color': cws.color,
+                    'last_check_date': cws.last_check_date,
+                },
+            }
+            for cws in cwses],
     })
 
 
@@ -75,10 +82,6 @@ def _export_project(p):
         'projectId': p.id,
         'name': p.name,
     }
-
-
-def _export_checks(conf_project):
-    return [_export_check(ch) for ch in conf_project.checks]
 
 
 def _export_check(conf_check):

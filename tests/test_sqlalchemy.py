@@ -29,3 +29,25 @@ def test_get_value_by_col_name_from_selected_row():
         assert row[1] == 'Dave'
         assert row[t_users.c.name] == 'Dave'
         assert row['name'] == 'Dave'
+
+
+def test_composite_primary_key():
+    from sqlalchemy.exc import IntegrityError
+    metadata = MetaData()
+    t_ccs = Table('current_check_statuses', metadata,
+        Column('project_id', String, primary_key=True),
+        Column('check_id', String, primary_key=True),
+        Column('color', String))
+    engine = create_engine('sqlite:///:memory:')
+    metadata.create_all(engine)
+    with engine.begin() as conn:
+        conn.execute(t_ccs.insert().values(project_id='p1', check_id='c1', color='red'))
+        conn.execute(t_ccs.insert().values(project_id='p1', check_id='c2', color='green'))
+        conn.execute(t_ccs.insert().values(project_id='p2', check_id='c1', color='green'))
+    try:
+        with engine.begin() as conn:
+            conn.execute(t_ccs.insert().values(project_id='p1', check_id='c1', color='green'))
+    except IntegrityError:
+        pass
+    else:
+        raise Exception('IntegrityError was expected')
