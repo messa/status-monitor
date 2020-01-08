@@ -1,5 +1,6 @@
 import React from 'react'
 import useFetch from '../lib/useFetch'
+import ErrorMessage from './ErrorMessage'
 
 function User() {
   const [ data, error ] = useFetch('/api/user')

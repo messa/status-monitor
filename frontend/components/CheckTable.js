@@ -1,5 +1,6 @@
 import React from 'react'
 import useFetch from '../lib/useFetch'
+import ErrorMessage from './ErrorMessage'
 
 function CheckTable({ projectId }) {
   const [ data, error ] = useFetch(`/api/checks?projectId=${projectId}`)
