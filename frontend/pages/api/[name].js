@@ -5,7 +5,8 @@ import fetch from 'node-fetch'
 export default async function(req, res) {
   // Note: Websockets support not implemented here
   try {
-    const newUrl = 'http://localhost:8080' + req.url
+    const backendUrl = 'http://localhost:8080'
+    const newUrl = backendUrl + req.url
     const fetchOptions = {
       method: req.method,
       // headers: Object.assign({ 'x-forwarded-host': req.headers.host }, req.headers, { host: url.host }),
@@ -29,8 +30,14 @@ export default async function(req, res) {
     const headers = proxyRes.headers.raw()
     for (const key of Object.keys(headers)) {
       if (key === 'alt-svc' || key === 'connection') continue
-      console.debug(`Proxy response header: ${key}: ${headers[key]}`)
-      res.setHeader(key, headers[key])
+      let value = new String(headers[key])
+      if (key === 'location' && value.startsWith(backendUrl)) {
+        const newValue = value.slice(backendUrl.length)
+        console.debug(`Stripping backend URL from ${key}: ${value} -> ${newValue}`)
+        value = newValue
+      }
+      console.debug(`Proxy response header: ${key}: ${value}`)
+      res.setHeader(key, value)
     }
 
     // Stream the proxy response
