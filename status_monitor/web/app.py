@@ -4,6 +4,7 @@ import re
 
 from .api import routes as api_routes
 from .auth import routes as auth_routes
+from .helpers import get_user
 
 
 routes = web.RouteTableDef()
@@ -15,7 +16,12 @@ static_frontend = here.parent.parent / 'frontend' / 'out'
 
 @routes.get('/')
 async def index_handler(request):
-    return web.HTTPFound(location='/dashboard')
+    user = await get_user(request)
+    if not user:
+        return web.HTTPFound(location='/login')
+    else:
+        return web.HTTPFound(location='/dashboard')
+
 
 
 @routes.get('/{filename}')

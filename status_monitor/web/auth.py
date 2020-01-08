@@ -5,7 +5,7 @@ from logging import getLogger
 from requests_oauthlib import OAuth2Session
 
 from ..util import wrap_async
-from .helpers import with_session
+from .helpers import with_session, get_model
 
 
 # based on https://requests-oauthlib.readthedocs.io/en/latest/examples/google.html
@@ -77,17 +77,22 @@ async def index_handler(request, session):
     if not profile['verified_email']:
         raise HTTPFound('/login?error=email-not-verified')
 
+    # TODO: limit who can login according to configuration
+
+    # TODO: should we do something with profile.get('hd')?
+
+    user = await get_model(request).users.get_user_after_oauth(
+        google_id=profile['id'],
+        email=profile['email'],
+        name=profile['name'],
+        picture=profile['picture'],
+        locale=profile['locale'])
+
     session['user'] = {
         'google_id': profile['id'],
-        'google_hd': profile.get('hd'),
-        'email': profile['email'],
-        'name': profile['name'],
-        'picture': profile['picture'],
-        'locale': profile['locale'],
-        'google_auth': {
-            'token': token,
-            'profile': profile,
-        },
+        'user_id': user.id,
+        'google_token': token,
+        'google_profile': profile,
     }
 
     raise HTTPFound('/dashboard')

@@ -9,7 +9,7 @@ from secrets import token_urlsafe
 logger = getLogger(__name__)
 
 
-def get_cookie_name(request):
+def _get_cookie_name(request):
     return request.app['conf'].session_cookie_name or 'SESSION'
 
 
@@ -29,6 +29,12 @@ class Session:
     def __setitem__(self, key, value):
         self._data[key] = value
         return value
+
+    def get(self, key, default=None):
+        return self._data.get(key, default)
+
+    def items(self):
+        return self._data.items()
 
     def pop(self, *args, **kwargs):
         return self._data.pop(*args, **kwargs)
@@ -52,9 +58,20 @@ class Session:
             self._original_data = deepcopy(self._data)
 
 
+def test_create_dict_from_session():
+    # TODO: move to tests
+    s = Session(request=None, session_id='s123', data=None)
+    assert dict(s.items()) == {}
+    s['foo'] = 'bar'
+    assert dict(s.items()) == {'foo': 'bar'}
+
+
+test_create_dict_from_session()
+
+
 async def get_session(request):
     if not request.get('session'):
-        cookie_name = get_cookie_name(request)
+        cookie_name = _get_cookie_name(request)
         cookie_value = request.cookies.get(cookie_name)
         if cookie_value:
             session_data = await request.app['model'].sessions.load_session(session_id=cookie_value)
@@ -66,11 +83,11 @@ async def get_session(request):
     return request['session']
 
 
-def insert_session_into_response(request, response):
+def _insert_session_into_response(request, response):
     assert isinstance(response, Response)
     v = request.pop('set_session_cookie_value', None)
     if v:
-        cookie_name = get_cookie_name(request)
+        cookie_name = _get_cookie_name(request)
         # https://docs.aiohttp.org/en/stable/web_reference.html#aiohttp.web.StreamResponse.set_cookie
         # TODO: figure out when to send secure=True
         response.set_cookie(cookie_name, v, max_age=86400 * 30, httponly=True)
@@ -95,7 +112,7 @@ def with_session(handler):
         assert isinstance(response, StreamResponse)
         if isinstance(response, Response):
             # otherwise likely got websocket or streaming
-            insert_session_into_response(request, response)
+            _insert_session_into_response(request, response)
 
         if raise_response:
             raise response
