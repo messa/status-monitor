@@ -10,7 +10,8 @@ export default async function(req, res) {
       method: req.method,
       // headers: Object.assign({ 'x-forwarded-host': req.headers.host }, req.headers, { host: url.host }),
       headers: {
-        cookie: req.headers.cookie,
+        'cookie': req.headers.cookie,
+        'host': req.headers.host,
       },
       redirect: 'manual',
     }

@@ -22,6 +22,11 @@ logger = getLogger(__name__)
 @routes.get('/api/auth/google')
 @with_session
 async def index_handler(request, session):
+
+    logger.debug('-----------------------------------------------------------------------------')
+    logger.debug('URL: %s', request.url)
+    logger.debug('Headers: %s', request.headers)
+
     google_conf = request.app['conf'].google_oauth
     scope = [
         'https://www.googleapis.com/auth/userinfo.email',
@@ -37,6 +42,11 @@ async def index_handler(request, session):
 @routes.get('/api/auth/google-callback')
 @with_session
 async def index_handler(request, session):
+
+    logger.debug('-----------------------------------------------------------------------------')
+    logger.debug('URL: %s', request.url)
+    logger.debug('Headers: %s', request.headers)
+
     google_conf = request.app['conf'].google_oauth
     if request.url.query['state'] != session.pop('google_oauth_state', None):
         logger.info('State mismatch')
@@ -81,3 +91,4 @@ async def index_handler(request, session):
     }
 
     raise HTTPFound('/dashboard')
+    #return Response(status=302, headers={'Location': '/dashboard'})
