@@ -26,7 +26,6 @@ async def logout(request, session):
     raise HTTPFound('/')
 
 
-
 @routes.get('/api/auth/google')
 @with_session
 async def index_handler(request, session):

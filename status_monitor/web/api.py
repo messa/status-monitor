@@ -51,6 +51,18 @@ async def project_handler(request):
     })
 
 
+@routes.get('/api/checks')
+async def checks_handler(request):
+    await check_user(request)
+    project_id = request.url.query['projectId']
+    conf = request.app['conf']
+    project = conf.get_project_by_id(project_id)
+    return json_response({
+        'checks': _export_checks(project),
+    })
+
+
+
 async def _export_projects(conf):
     projects = []
     for p in conf.projects:
@@ -62,5 +74,18 @@ def _export_project(p):
     return {
         'projectId': p.id,
         'name': p.name,
+    }
+
+
+def _export_checks(conf_project):
+    return [_export_check(ch) for ch in conf_project.checks]
+
+
+def _export_check(conf_check):
+    return {
+        'id': conf_check.id,
+        'url': conf_check.url,
+        'must_contain': conf_check.must_contain,
+        'cannot_contain': conf_check.cannot_contain,
     }
 

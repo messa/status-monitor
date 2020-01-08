@@ -5,6 +5,7 @@ import Layout from '../components/Layout'
 import ErrorMessage from '../components/ErrorMessage'
 import ProjectMenu from '../components/ProjectMenu'
 import User from '../components/User'
+import CheckTable from '../components/CheckTable'
 import useFetch from '../lib/useFetch'
 
 function CheckPage(props) {
@@ -28,6 +29,7 @@ function ProjectChecks({ projectId }) {
     <>
       <h1>{project.name}</h1>
       <ProjectMenu activeItem='checks' projectId={projectId} />
+      <CheckTable projectId={projectId} />
     </>
   )
 }

@@ -1,4 +1,6 @@
+from base64 import urlsafe_b64encode
 from functools import partial
+import hashlib
 import os
 from pathlib import Path
 import re
@@ -48,6 +50,7 @@ class Configuration:
         self.log_file = cfg_path / cfg['log_file'] if cfg.get('log_file') else None
         self.google_oauth = GoogleOAuth(cfg['google_oauth'])
         self.projects = [Project(p) for p in cfg['projects']]
+        verify_that_project_ids_are_unique(self.projects)
         self.session_cookie_name = cfg.get('session_cookie_name', 'STATUS_MONITOR_SESSION')
 
     def get_project_by_id(self, project_id):
@@ -55,6 +58,17 @@ class Configuration:
             if p.id == project_id:
                 return p
         raise ProjectNotFoundError(f'Project id {project_id!r} not found')
+
+
+def verify_that_project_ids_are_unique(projects):
+    by_id = {}
+    for p in projects:
+        if not p.id:
+            raise Exception(f'Project has no id: {p}')
+        assert isinstance(p.id, str)
+        if p.id in by_id:
+            raise Exception(f'There are two projects with the same id: {p} abd {by_id[p.id]}')
+        by_id[p.id] = p
 
 
 class ProjectNotFoundError (Exception):
@@ -84,14 +98,35 @@ class Project:
                     self.checks.append(HTTPCheck(ch))
                 else:
                     raise Exception(f"Unknown check type: {ch['type']!r}")
+            verify_that_check_ids_are_unique(self.checks)
         except Exception as e:
             raise Exception(f'Failed to process configuration of project {self.id}: {e}')
+
+
+def verify_that_check_ids_are_unique(checks):
+    by_id = {}
+    for ch in checks:
+        if not ch.id:
+            raise Exception(f'Check has no id: {ch}')
+        assert isinstance(ch.id, str)
+        if ch.id in by_id:
+            raise Exception(f'There are two checks with the same id: {ch} abd {by_id[ch.id]}')
+        by_id[ch.id] = ch
 
 
 class HTTPCheck:
 
     def __init__(self, cfg):
+        self.id = cfg.get('id') or generate_check_id(url=cfg['url'])
         self.url = cfg['url']
         self.must_contain = cfg.get('must_contain')
         self.cannot_contain = cfg.get('cannot_contain')
 
+
+def generate_check_id(url):
+    h_bytes = hashlib.sha3_256(url.encode()).digest()
+    h_b64 = urlsafe_b64encode(h_bytes).decode()
+    return 'C' + h_b64.replace('_', '').replace('-', '')[:7]
+
+
+assert generate_check_id('http://example.com') == 'CXjaiiW2'

@@ -7,6 +7,7 @@ function Layout({ children }) {
       <Head>
         <title>Status Monitor</title>
         <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700&display=swap&subset=latin-ext" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap&subset=latin-ext" rel="stylesheet" />
         <style>{globalStyles}</style>
       </Head>
       <div className='mainContent'>
@@ -19,6 +20,7 @@ function Layout({ children }) {
 const globalStyles = `
   body {
     font-family: IBM Plex Sans, Roboto, sans-serif;
+    font-size: 16px;
     margin: 0;
     padding: 0;
   }
@@ -29,6 +31,14 @@ const globalStyles = `
   }
   a {
     color: #00c;
+  }
+  code {
+    font-family: IBM Plex Mono, Roboto Mono, monospace;
+  }
+  td, th {
+    font-size: 16px;
+    text-align: left;
+    padding: 1px 16px 1px 0;
   }
 `
 
