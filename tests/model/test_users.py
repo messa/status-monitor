@@ -1,26 +1,8 @@
-from asyncio import get_event_loop
-from pytest import fixture, mark
-from sqlalchemy import create_engine, select
+from pytest import mark
+from sqlalchemy import select
 
 from status_monitor.model.tables import metadata
 from status_monitor.model.users import Users
-
-
-@fixture
-def loop():
-    return get_event_loop
-
-
-@fixture
-def engine(temp_dir):
-    from uuid import uuid4
-    db_path = temp_dir / f'{uuid4()}.sqlite'
-    engine = create_engine(f'sqlite:///{db_path}')
-    try:
-        metadata.create_all(engine)
-        yield engine
-    finally:
-        engine.dispose()
 
 
 def test_generate_user_id():
