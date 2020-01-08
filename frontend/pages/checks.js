@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import Layout from '../components/Layout'
 import ErrorMessage from '../components/ErrorMessage'
 import ProjectMenu from '../components/ProjectMenu'
+import User from '../components/User'
 import useFetch from '../lib/useFetch'
 
 function CheckPage(props) {
@@ -11,6 +12,7 @@ function CheckPage(props) {
   const projectId = router.query.p
   return (
     <Layout>
+      <User />
       <p><Link href='/dashboard'><a>List of all projects</a></Link></p>
       {projectId && <ProjectChecks projectId={projectId} />}
     </Layout>

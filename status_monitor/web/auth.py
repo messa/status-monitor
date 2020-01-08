@@ -19,6 +19,14 @@ routes = RouteTableDef()
 logger = getLogger(__name__)
 
 
+@routes.get('/api/auth/logout')
+@with_session
+async def logout(request, session):
+    session['user'] = None
+    raise HTTPFound('/')
+
+
+
 @routes.get('/api/auth/google')
 @with_session
 async def index_handler(request, session):
@@ -96,4 +104,3 @@ async def index_handler(request, session):
     }
 
     raise HTTPFound('/dashboard')
-    #return Response(status=302, headers={'Location': '/dashboard'})
