@@ -39,7 +39,12 @@ async def index_handler(request, session):
         'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/userinfo.profile',
     ]
-    google = OAuth2Session(google_conf.client_id, scope=scope, redirect_uri=google_conf.redirect_uri)
+    try:
+        google = OAuth2Session(google_conf.client_id, scope=scope, redirect_uri=google_conf.redirect_uri)
+    except AttributeError as e:
+        if 'populate_token_attributes' in str(e):
+            raise Exception(f'Your version of requests_oauthlib is probably too old: {e}') from e
+        raise e
     authorization_url, state = google.authorization_url(authorization_base_url,
         access_type='offline', prompt='select_account')
     session['google_oauth_state'] = state

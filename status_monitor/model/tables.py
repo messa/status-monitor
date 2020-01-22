@@ -18,6 +18,7 @@ t_users = Table('users', metadata,
     Column('locale', String))
 
 t_projects = Table('projects', metadata,
+    # mainly for translation between configuration project id and internal database project id
     Column('id', Integer, primary_key=True),
     Column('conf_project_id', String, unique=True))
 
@@ -27,7 +28,7 @@ t_checks = Table('checks', metadata,
     Column('conf_check_id', String),
     Column('last_check_color', String), # red or green :)
     Column('last_check_date', DateTime),
-    Index('idx_cpidccid', 'conf_project_id', 'conf_check_id', unique=True))
+    Index('idx_cpidccid', 'project_id', 'conf_check_id', unique=True))
 
 t_check_results = Table('check_results', metadata,
     Column('id', Integer, primary_key=True),
@@ -47,6 +48,7 @@ t_alerts = Table('alerts', metadata,
     Index('idx_projidcreatedt', 'project_id', 'create_date'))
 
 t_alert_checks = Table('alert_checks', metadata,
+    # Alert can be aggregated from multiple checks
     Column('id', Integer, primary_key=True),
     Column('project_id', Integer, ForeignKey('projects.id'),  nullable=False),
     Column('alert_id', Integer, ForeignKey("alerts.id"), nullable=False),

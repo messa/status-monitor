@@ -1,2 +1,2 @@
 run:
-	python3.8 -m status_monitor -v
+	python3 -m status_monitor -v

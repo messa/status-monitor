@@ -1,9 +1,10 @@
 from collections import defaultdict, namedtuple
+from datetime import datetime
 from logging import getLogger
-from sqlalchemy.sql import select
+from sqlalchemy.sql import select, and_
 
 from ..util import wrap_async
-from .tables import t_current_check_statuses as t_ccs
+from .tables import t_checks
 
 
 logger = getLogger(__name__)
@@ -16,20 +17,44 @@ class Checks:
         self._engine = engine
 
     @wrap_async
-    def list_checks_with_statuses(self, project_id):
-        conf_project = self._conf.get_project_by_id(project_id)
-        conf_checks = conf_project.checks
+    def list_checks_for_project(self, project):
+        assert isinstance(project.id, int)
+        assert isinstance(project.conf_project_id, str)
         checks = []
+        conf_checks = self._conf.get_project_by_id(project.conf_project_id).checks
         with self._engine.begin() as conn:
-            rows = conn.execute(select([t_ccs]).where(t_ccs.c.project_id == project_id))
-            row_by_check_id = {row['check_id']: row for row in rows}
-            for ch in conf_checks:
-                row = row_by_check_id.get(ch.id) or defaultdict(lambda: None)
-                checks.append(CheckWithStatus(
-                    check=ch,
-                    color=row['color'],
-                    last_check_date=row['last_check_date']))
+            rows = conn.execute(select([t_checks]).where(t_checks.c.project_id == project.id)).fetchall()
+            rows_by_ccid = {row['conf_check_id']: row for row in rows}
+            for conf_check in conf_checks:
+                row = rows_by_ccid.get(conf_check.id)
+                if not row:
+                    logger.info('Configured check %r not present in database - inserting', conf_check.id)
+                    row = {
+                        'project_id': project.id,
+                        'conf_check_id': conf_check.id,
+                    }
+                    conn.execute(t_checks.insert().values(row))
+                    row, = conn.execute(select([t_checks]).where(and_(
+                        t_checks.c.project_id == project.id,
+                        t_checks.c.conf_check_id == conf_check.id,
+                    ))).fetchall()
+                checks.append(Check(row, conf_check))
         return checks
 
 
-CheckWithStatus = namedtuple('CheckWithStatus', 'check color last_check_date')
+class Check:
+
+    def __init__(self, row, conf_check):
+        self.id = row['id']
+        self.conf_check_id = row['conf_check_id']
+        self.project_id = row['project_id']
+        self.last_check_color = row['last_check_color']
+        self.last_check_date = row['last_check_date']
+        assert self.conf_check_id == conf_check.id
+        assert self.last_check_date is None or isinstance(self.last_check_date, datetime)
+        self.url = conf_check.url
+        self.must_conain = conf_check.must_contain
+        self.cannot_contain = conf_check.cannot_contain
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} id={self.id!r}>'

@@ -2,6 +2,7 @@ from logging import getLogger
 from sqlalchemy import create_engine
 
 from .checks import Checks
+from .projects import Projects
 from .sessions import Sessions
 from .tables import metadata
 from .users import Users
@@ -23,3 +24,4 @@ class Model:
         self.checks = Checks(conf=conf, engine=engine)
         self.sessions = Sessions(engine=engine)
         self.users = Users(engine=engine)
+        self.projects = Projects(engine=engine, conf=conf, model=self)

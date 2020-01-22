@@ -15,11 +15,6 @@ class Users:
     def __init__(self, engine):
         self._engine = engine
 
-    @staticmethod
-    def _generate_user_id():
-        return 'U' + token_urlsafe(10).replace('-', '').replace('_', '')[:7]
-
-
     @wrap_async
     def get_by_id(self, user_id):
         with self._engine.begin() as conn:
@@ -37,7 +32,6 @@ class Users:
                 row = conn.execute(select([t_users]).where(t_users.c.google_id == google_id)).first()
                 if not row:
                     row = {
-                        'id': self._generate_user_id(),
                         'email': email,
                         'google_id': google_id,
                         'name': name,
@@ -46,6 +40,7 @@ class Users:
                         'create_date': datetime.utcnow(),
                     }
                     conn.execute(t_users.insert().values(row))
+                    row, = conn.execute(select([t_users]).where(t_users.c.google_id == google_id)).fetchall()
                 user = User(row=row)
             else:
                 raise Exception('google_id must be provided')
