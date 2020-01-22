@@ -32,6 +32,9 @@ class ReloadWrapper:
                 self._value = self._factory(self._file_path, f.read())
                 self._stat_snapshot = sn
 
+    def get_reload_version(self):
+        return self._stat_snapshot
+
     def __getattr__(self, name):
         return getattr(self._value, name)
 

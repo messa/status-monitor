@@ -7,6 +7,7 @@ import os
 from signal import SIGTERM
 import sys
 
+from .check_processing import run_monitoring
 from .configuration import get_configuration
 from .model import get_model
 from .web.app import get_app
@@ -41,7 +42,7 @@ def status_monitor_main():
         sys.exit(f'ERROR: {e!r}')
 
 
-log_format = '%(asctime)s %(name)-27s %(levelname)5s: %(message)s'
+log_format = '%(asctime)s %(name)-43s %(levelname)5s: %(message)s'
 
 
 def setup_logging(verbose):
@@ -73,7 +74,7 @@ async def async_main(conf):
     tasks = []
     try:
         tasks.append(create_task(run_app(web_app, term_event)))
-        tasks.append(create_task(run_monitoring(conf, term_event)))
+        tasks.append(create_task(run_monitoring(conf, model, term_event)))
         done, pending = await wait(tasks, return_when=FIRST_EXCEPTION)
         for task in done:
             try:
@@ -91,10 +92,6 @@ async def async_main(conf):
                 await task
             except Exception as e:
                 logger.debug('Main task %s finished with exception after cancel: %r', task, e)
-
-
-async def run_monitoring(conf, stop_event):
-    await stop_event.wait()
 
 
 async def run_app(app, stop_event):
