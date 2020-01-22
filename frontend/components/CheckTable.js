@@ -17,14 +17,13 @@ function CheckTable({ projectId }) {
             <th>Status</th>
             <th>Last check date</th>
           </tr>
-          {checks.map(checkWithStatus => {
-            const { check, current_status } = checkWithStatus
+          {checks.map(check => {
             return (
               <tr key={check.id}>
                 <td><code>{check.id}</code></td>
                 <td><code>{check.url}</code></td>
-                <td><code>{current_status.color || '-'}</code></td>
-                <td><code>{current_status.last_check_date || '-'}</code></td>
+                <td><code>{check.last_check_color || '-'}</code></td>
+                <td><code>{check.last_check_date || '-'}</code></td>
               </tr>
             )
           })}

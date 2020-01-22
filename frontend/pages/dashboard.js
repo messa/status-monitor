@@ -24,8 +24,8 @@ function ProjectList() {
   return (
     <ul>
       {projects.map(p => (
-        <li key={p.projectId}>
-          <Link href={{ pathname: '/checks', query: { p: p.projectId } }}><a>{p.name}</a></Link>
+        <li key={p.id}>
+          <Link href={{ pathname: '/checks', query: { p: p.id } }}><a>{p.name}</a></Link>
         </li>
       ))}
     </ul>

@@ -56,4 +56,12 @@ async def test_list_checks(loop, model):
         assert len(checks) == 2
         assert checks[0].url == 'https://ip.messa.cz/'
         assert checks[1].url == 'https://image-url-preview.now.sh/'
+        assert checks[0].export() == {
+            'id': 1,
+            'url': 'https://ip.messa.cz/',
+            'last_check_color': None,
+            'last_check_date': None,
+            'must_contain': None,
+            'cannot_contain': None,
+        }
 

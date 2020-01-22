@@ -43,3 +43,21 @@ async def test_list_projects(loop, engine, conf):
         assert projects[0].id == 1
         assert projects[0].conf_project_id == 'demo'
         assert projects[0].name == 'Demo'
+        assert projects[0].export() == {
+            'id': 1,
+            'name': 'Demo',
+        }
+
+
+@mark.asyncio
+async def test_get_project_by_id(loop, engine, conf):
+    projects_model = Projects(engine=engine, conf=conf, model=None)
+    project, = await projects_model.list_all()
+    project = await projects_model.get_by_id(project.id)
+    assert project.id == 1
+    assert project.conf_project_id == 'demo'
+    assert project.name == 'Demo'
+    assert project.export() == {
+        'id': 1,
+        'name': 'Demo',
+    }

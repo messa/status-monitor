@@ -34,6 +34,14 @@ class Projects:
                 projects.append(Project(row, conf_project, model=self._model))
         return projects
 
+    @wrap_async
+    def get_by_id(self, project_id):
+        assert isinstance(project_id, int)
+        with self._engine.begin() as conn:
+            row = conn.execute(select([t_projects]).where(t_projects.c.id == project_id)).first()
+            conf_project = self._conf.get_project_by_id(row['conf_project_id'])
+            return Project(row, conf_project, model=self._model)
+
 
 class Project:
 
@@ -56,3 +64,9 @@ class Project:
 
     async def list_checks(self):
         return await self._model.checks.list_checks_for_project(project=self)
+
+    def export(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }

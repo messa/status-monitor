@@ -48,13 +48,23 @@ class Check:
         self.id = row['id']
         self.conf_check_id = row['conf_check_id']
         self.project_id = row['project_id']
-        self.last_check_color = row['last_check_color']
         self.last_check_date = row['last_check_date']
+        self.last_check_color = row['last_check_color']
         assert self.conf_check_id == conf_check.id
         assert self.last_check_date is None or isinstance(self.last_check_date, datetime)
         self.url = conf_check.url
-        self.must_conain = conf_check.must_contain
+        self.must_contain = conf_check.must_contain
         self.cannot_contain = conf_check.cannot_contain
 
     def __repr__(self):
         return f'<{self.__class__.__name__} id={self.id!r}>'
+
+    def export(self):
+        return {
+            'id': self.id,
+            'url': self.url,
+            'must_contain': self.must_contain,
+            'cannot_contain': self.cannot_contain,
+            'last_check_date': self.last_check_date,
+            'last_check_color': self.last_check_color,
+        }
