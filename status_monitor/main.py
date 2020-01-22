@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from asyncio import get_running_loop, create_task
+from asyncio import FIRST_EXCEPTION, get_running_loop, create_task, wait
 import asyncio
 from aiohttp import web
 from logging import getLogger
@@ -67,11 +67,34 @@ async def async_main(conf):
     term_event = asyncio.Event()
     loop.add_signal_handler(SIGTERM, term_event.set)
     model = get_model(conf=conf)
-    app = get_app()
-    app['conf'] = conf
-    app['model'] = model
-    web_task = create_task(run_app(app, term_event))
-    await web_task
+    web_app = get_app()
+    web_app['conf'] = conf
+    web_app['model'] = model
+    tasks = []
+    try:
+        tasks.append(create_task(run_app(web_app, term_event)))
+        tasks.append(create_task(run_monitoring(conf, term_event)))
+        done, pending = await wait(tasks, return_when=FIRST_EXCEPTION)
+        for task in done:
+            try:
+                await task
+            except Exception as e:
+                logger.debug('Main task %s finished with exception: %r', task, e)
+
+    finally:
+        to_cancel = [t for t in tasks if not t.done()]
+        for task in to_cancel:
+            logger.debug('Cancelling main task %r', task)
+            task.cancel()
+        for task in to_cancel:
+            try:
+                await task
+            except Exception as e:
+                logger.debug('Main task %s finished with exception after cancel: %r', task, e)
+
+
+async def run_monitoring(conf, stop_event):
+    await stop_event.wait()
 
 
 async def run_app(app, stop_event):
@@ -83,3 +106,5 @@ async def run_app(app, stop_event):
         await stop_event.wait()
     finally:
         await runner.cleanup()
+
+
