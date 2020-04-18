@@ -28,7 +28,7 @@ async def logout(request, session):
 
 @routes.get('/api/auth/google')
 @with_session
-async def index_handler(request, session):
+async def google_auth_handler(request, session):
 
     logger.debug('-----------------------------------------------------------------------------')
     logger.debug('URL: %s', request.url)
@@ -53,7 +53,7 @@ async def index_handler(request, session):
 
 @routes.get('/api/auth/google-callback')
 @with_session
-async def index_handler(request, session):
+async def google_auth_callback_handler(request, session):
 
     logger.debug('-----------------------------------------------------------------------------')
     logger.debug('URL: %s', request.url)

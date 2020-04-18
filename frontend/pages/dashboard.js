@@ -2,13 +2,11 @@ import React from 'react'
 import Link from 'next/link'
 import Layout from '../components/Layout'
 import ErrorMessage from '../components/ErrorMessage'
-import User from '../components/User'
 import useFetch from '../lib/useFetch'
 
 function DashboardPage() {
   return (
     <Layout>
-      <User />
       <h1>Dashboard</h1>
       <p>Projects:</p>
       <ProjectList />

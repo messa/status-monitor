@@ -1,5 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
+import NavBar from './NavBar'
 
 function Layout({ children }) {
   return (
@@ -10,6 +11,7 @@ function Layout({ children }) {
         <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap&subset=latin-ext" rel="stylesheet" />
         <style>{globalStyles}</style>
       </Head>
+      <NavBar />
       <div className='mainContent'>
         {children}
       </div>
@@ -20,14 +22,19 @@ function Layout({ children }) {
 const globalStyles = `
   body {
     font-family: IBM Plex Sans, Roboto, sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     margin: 0;
     padding: 0;
   }
-  .mainContent {
+  .mainContainer, .mainContent {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 16px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .mainContent {
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
   a {
     color: #00c;
