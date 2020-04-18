@@ -1,4 +1,4 @@
-from asyncio import TimeoutError, Event, create_task, sleep, wait, FIRST_COMPLETED
+from asyncio import CancelledError, TimeoutError, Event, create_task, sleep, wait, FIRST_COMPLETED
 from logging import getLogger
 
 
