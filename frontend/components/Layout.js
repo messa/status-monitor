@@ -7,8 +7,8 @@ function Layout({ children }) {
     <div className='Layout'>
       <Head>
         <title>Status Monitor</title>
-        <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700&display=swap&subset=latin-ext" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap&subset=latin-ext" rel="stylesheet" />
+        <link href='https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700&display=swap&subset=latin-ext' rel='stylesheet' />
+        <link href='https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap&subset=latin-ext' rel='stylesheet' />
         <style>{globalStyles}</style>
       </Head>
       <NavBar />
@@ -20,6 +20,9 @@ function Layout({ children }) {
 }
 
 const globalStyles = `
+  *, :after, :before {
+    box-sizing: border-box;
+  }
   body {
     font-family: IBM Plex Sans, Roboto, sans-serif;
     font-size: 15px;
@@ -33,8 +36,8 @@ const globalStyles = `
     padding-right: 10px;
   }
   .mainContent {
-    padding-top: 16px;
-    padding-bottom: 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
   }
   a {
     color: #00c;
@@ -46,6 +49,11 @@ const globalStyles = `
     font-size: 16px;
     text-align: left;
     padding: 1px 16px 1px 0;
+  }
+  h1 {
+    font-size: 21px;
+    font-weight: 600;
+    margin-top: 0;
   }
 `
 
