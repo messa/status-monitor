@@ -3,6 +3,8 @@ import useFetch from '../lib/useFetch'
 import ErrorMessage from './ErrorMessage'
 
 function User() {
+  return '42'
+  /*
   const [ data, error ] = useFetch('/api/user')
   if (error) return <ErrorMessage title='Failed to load user' error={error} />
   if (!data || !data.user) return <br />
@@ -14,6 +16,7 @@ function User() {
       <a href='/api/auth/logout'>Log out</a>
     </div>
   )
+  */
 }
 
 export default User

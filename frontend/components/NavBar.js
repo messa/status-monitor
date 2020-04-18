@@ -1,29 +1,41 @@
 import React from 'react'
 import Link from 'next/link'
 import classnames from 'classnames'
-import Octicon, { SignOut, Person } from '@primer/octicons-react'
+import Octicon, { Person, SignIn, SignOut } from '@primer/octicons-react'
 import User from './User'
 
-function NavBar() {
+function NavBar({ user }) {
   return (
     <div className='NavBar'>
       <div className='mainContainer flexContainer'>
 
         <div className='siteTitle'>
-          <Link href='/'><a>Status Monitor</a></Link>
+          <Link href={user ? '/dashboard' : '/home'}><a>Status Monitor</a></Link>
         </div>
 
         <div className='mainMenu'>
-          <NavBarItem href='/projects' title='Projects' />
-          <NavBarItem href='/alerts' title='Alerts' />
-          <NavBarItem href='/checks' title='Checks' />
+          {user && (
+            <>
+              <NavBarItem href='/projects' title='Projects' />
+              <NavBarItem href='/alerts' title='Alerts' />
+              <NavBarItem href='/checks' title='Checks' />
+            </>
+          )}
         </div>
 
         <div className='userMenu'>
-          <NavBarItem href='/profile' title='Profile' octicon={Person} right />
-          <NavBarItem href='/logout' title='Sign out' octicon={SignOut} right rawLink />
+          {user && (
+            <>
+              <NavBarItem href='/profile' title='Profile' octicon={Person} right />
+              <NavBarItem href='/api/auth/logout' title='Sign out' octicon={SignOut} right rawLink />
+            </>
+          )}
+          {!user && (
+            <>
+              <NavBarItem href='/login' title='Sign in' octicon={SignIn} right />
+            </>
+          )}
         </div>
-
 
       </div>
       <style jsx global>{`
@@ -32,7 +44,7 @@ function NavBar() {
           padding-bottom: 12px;
           font-family: IBM Plex Mono, Roboto Mono, monospace;
           font-size: 14px;
-          font-weight: 200;
+          font-weight: 400;
         }
 
         .NavBar .flexContainer {
@@ -55,7 +67,7 @@ function NavBar() {
           display: inline-block;
           margin-right: 20px;
         }
-        .NavBar .navBarItem + .right {
+        .NavBar .NavBarItem.right {
           margin-right: 0;
           margin-left: 20px;
         }

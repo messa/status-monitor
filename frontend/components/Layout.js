@@ -1,8 +1,11 @@
 import React from 'react'
 import Head from 'next/head'
+import useSWR from 'swr'
 import NavBar from './NavBar'
 
 function Layout({ children }) {
+  const { data, error } = useSWR('/api/user')
+  const { user } = data || {}
   return (
     <div className='Layout'>
       <Head>
@@ -11,7 +14,7 @@ function Layout({ children }) {
         <link href='https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap&subset=latin-ext' rel='stylesheet' />
         <style>{globalStyles}</style>
       </Head>
-      <NavBar />
+      <NavBar user={user} />
       <div className='mainContent'>
         {children}
       </div>
@@ -32,8 +35,8 @@ const globalStyles = `
   .mainContainer, .mainContent {
     max-width: 1000px;
     margin: 0 auto;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
   .mainContent {
     margin-top: 16px;
@@ -42,8 +45,11 @@ const globalStyles = `
   a {
     color: #00c;
   }
-  code {
+  pre, code {
     font-family: IBM Plex Mono, Roboto Mono, monospace;
+  }
+  pre {
+    font-size: 13px;
   }
   td, th {
     font-size: 16px;
