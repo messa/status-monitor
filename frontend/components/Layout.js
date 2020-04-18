@@ -58,7 +58,7 @@ const globalStyles = `
   }
   h1 {
     font-size: 21px;
-    font-weight: 600;
+    font-weight: 400;
     margin-top: 0;
   }
 `

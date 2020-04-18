@@ -3,8 +3,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Layout from '../components/Layout'
 import ErrorMessage from '../components/ErrorMessage'
-import ProjectMenu from '../components/ProjectMenu'
-import User from '../components/User'
 import useFetch from '../lib/useFetch'
 
 function AlertPage(props) {
@@ -12,8 +10,6 @@ function AlertPage(props) {
   const projectId = router.query.p
   return (
     <Layout>
-      <User />
-      <p><Link href='/dashboard'><a>List of all projects</a></Link></p>
       {projectId && <ProjectAlerts projectId={projectId} />}
     </Layout>
   )
@@ -27,7 +23,6 @@ function ProjectAlerts({ projectId }) {
   return (
     <>
       <h1>{project.name}</h1>
-      <ProjectMenu activeItem='alerts' projectId={projectId} />
     </>
   )
 }

@@ -15,7 +15,8 @@ t_users = Table('users', metadata,
     Column('email', String),
     Column('name', String),
     Column('picture', String),
-    Column('locale', String))
+    Column('locale', String),
+    Column('default_project_id', Integer, ForeignKey('projects.id')))
 
 t_projects = Table('projects', metadata,
     # mainly for translation between configuration project id and internal database project id

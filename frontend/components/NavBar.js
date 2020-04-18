@@ -5,6 +5,7 @@ import Octicon, { Person, SignIn, SignOut } from '@primer/octicons-react'
 import User from './User'
 
 function NavBar({ user }) {
+  const dpId = user ? user.default_project_id || 1 : null
   return (
     <div className='NavBar'>
       <div className='mainContainer flexContainer'>
@@ -16,9 +17,9 @@ function NavBar({ user }) {
         <div className='mainMenu'>
           {user && (
             <>
-              <NavBarItem href='/projects' title='Projects' />
-              <NavBarItem href='/alerts' title='Alerts' />
-              <NavBarItem href='/checks' title='Checks' />
+              <NavBarItem href={{ pathname: '/overview', query: { p: dpId } }} title='Overview' />
+              <NavBarItem href={{ pathname: '/alerts', query: { p: dpId } }} title='Alerts' />
+              <NavBarItem href={{ pathname: '/checks', query: { p: dpId } }} title='Checks' />
             </>
           )}
         </div>

@@ -62,6 +62,7 @@ class User:
         self.name = row['name']
         self.picture = row['picture']
         self.locale = row['locale']
+        self.default_project_id = row['default_project_id']
 
     def __repr__(self):
         cls = self.__class__.__name__
@@ -89,16 +90,3 @@ class User:
                     .where(t_users.c.id == self.id)
                     .values(update))
             self.__dict__.update(update)
-
-
-
-
-'''
-        user = model.users.get_by_id(session['user']['user_id'])
-    user = get_model(request).users.get_user_after_oauth(
-        google_id=profile['id'],
-        email=profile['email'],
-        name=profile['name'],
-        picture=profile['picture'],
-        locale=profile['locale'])
-'''
