@@ -26,6 +26,7 @@ async def user(request):
                 'email': user.email,
                 'name': user.name,
                 'picture': user.picture,
+                'default_project_id': user.default_project_id,
             },
         })
     else:
