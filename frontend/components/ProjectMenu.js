@@ -21,7 +21,11 @@ function ProjectMenu({ projectId, activeItem }) {
 
 function MenuItem({ active, href, content }) {
   if (active) return <strong>{content}</strong>
-  return <Link href={href}><a>{content}</a></Link>
+  return (
+    <Link href={href}>
+      <a>{content}</a>
+    </Link>
+  )
 }
 
 export default ProjectMenu

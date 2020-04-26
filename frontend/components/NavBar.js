@@ -9,17 +9,27 @@ function NavBar({ user }) {
   return (
     <div className='NavBar'>
       <div className='mainContainer flexContainer'>
-
         <div className='siteTitle'>
-          <Link href={user ? '/dashboard' : '/home'}><a>Status Monitor</a></Link>
+          <Link href={user ? '/dashboard' : '/home'}>
+            <a>Status Monitor</a>
+          </Link>
         </div>
 
         <div className='mainMenu'>
           {user && (
             <>
-              <NavBarItem href={{ pathname: '/overview', query: { p: dpId } }} title='Overview' />
-              <NavBarItem href={{ pathname: '/alerts', query: { p: dpId } }} title='Alerts' />
-              <NavBarItem href={{ pathname: '/checks', query: { p: dpId } }} title='Checks' />
+              <NavBarItem
+                href={{ pathname: '/overview', query: { p: dpId } }}
+                title='Overview'
+              />
+              <NavBarItem
+                href={{ pathname: '/alerts', query: { p: dpId } }}
+                title='Alerts'
+              />
+              <NavBarItem
+                href={{ pathname: '/checks', query: { p: dpId } }}
+                title='Checks'
+              />
             </>
           )}
         </div>
@@ -27,17 +37,32 @@ function NavBar({ user }) {
         <div className='userMenu'>
           {user && (
             <>
-              <NavBarItem href='/profile' title='Profile' octicon={Person} right />
-              <NavBarItem href='/api/auth/logout' title='Sign out' octicon={SignOut} right rawLink />
+              <NavBarItem
+                href='/profile'
+                title='Profile'
+                octicon={Person}
+                right
+              />
+              <NavBarItem
+                href='/api/auth/logout'
+                title='Sign out'
+                octicon={SignOut}
+                right
+                rawLink
+              />
             </>
           )}
           {!user && (
             <>
-              <NavBarItem href='/login' title='Sign in' octicon={SignIn} right />
+              <NavBarItem
+                href='/login'
+                title='Sign in'
+                octicon={SignIn}
+                right
+              />
             </>
           )}
         </div>
-
       </div>
       <style jsx global>{`
         .NavBar {
@@ -89,7 +114,6 @@ function NavBar({ user }) {
           color: #000;
           text-decoration: underline;
         }
-
       `}</style>
     </div>
   )
@@ -98,14 +122,20 @@ function NavBar({ user }) {
 function NavBarItem({ href, title, right, rawLink, octicon }) {
   let linkContent = title
   if (octicon) {
-    linkContent = <><Octicon icon={octicon} />{' '}{linkContent}</>
+    linkContent = (
+      <>
+        <Octicon icon={octicon} /> {linkContent}
+      </>
+    )
   }
-  let link = rawLink ? <a href={href}>{linkContent}</a> : <Link href={href}><a>{linkContent}</a></Link>
-  return (
-    <span className={classnames('NavBarItem', { right })}>
-      {link}
-    </span>
+  let link = rawLink ? (
+    <a href={href}>{linkContent}</a>
+  ) : (
+    <Link href={href}>
+      <a>{linkContent}</a>
+    </Link>
   )
+  return <span className={classnames('NavBarItem', { right })}>{link}</span>
 }
 
 export default NavBar

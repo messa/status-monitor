@@ -10,14 +10,18 @@ function Layout({ children }) {
     <div className='Layout'>
       <Head>
         <title>Status Monitor</title>
-        <link href='https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700&display=swap&subset=latin-ext' rel='stylesheet' />
-        <link href='https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap&subset=latin-ext' rel='stylesheet' />
+        <link
+          href='https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700&display=swap&subset=latin-ext'
+          rel='stylesheet'
+        />
+        <link
+          href='https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap&subset=latin-ext'
+          rel='stylesheet'
+        />
         <style>{globalStyles}</style>
       </Head>
       <NavBar user={user} />
-      <div className='mainContent'>
-        {children}
-      </div>
+      <div className='mainContent'>{children}</div>
     </div>
   )
 }

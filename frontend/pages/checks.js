@@ -9,16 +9,13 @@ import useFetch from '../lib/useFetch'
 function CheckPage(props) {
   const router = useRouter()
   const projectId = router.query.p
-  return (
-    <Layout>
-      {projectId && <ProjectChecks projectId={projectId} />}
-    </Layout>
-  )
+  return <Layout>{projectId && <ProjectChecks projectId={projectId} />}</Layout>
 }
 
 function ProjectChecks({ projectId }) {
-  const [ data, error ] = useFetch(`/api/project?projectId=${projectId}`)
-  if (error) return <ErrorMessage title='Failed to load project' error={error} />
+  const [data, error] = useFetch(`/api/project?projectId=${projectId}`)
+  if (error)
+    return <ErrorMessage title='Failed to load project' error={error} />
   if (!data) return null
   const { project } = data
   return (

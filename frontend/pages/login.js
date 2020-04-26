@@ -6,7 +6,9 @@ function DashboardPage() {
     <Layout>
       <h1>Sign in</h1>
 
-      <p><a href='/api/auth/google'>Sign in using Google</a></p>
+      <p>
+        <a href='/api/auth/google'>Sign in using Google</a>
+      </p>
     </Layout>
   )
 }

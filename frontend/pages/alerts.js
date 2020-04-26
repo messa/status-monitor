@@ -8,16 +8,13 @@ import useFetch from '../lib/useFetch'
 function AlertPage(props) {
   const router = useRouter()
   const projectId = router.query.p
-  return (
-    <Layout>
-      {projectId && <ProjectAlerts projectId={projectId} />}
-    </Layout>
-  )
+  return <Layout>{projectId && <ProjectAlerts projectId={projectId} />}</Layout>
 }
 
 function ProjectAlerts({ projectId }) {
-  const [ data, error ] = useFetch(`/api/project?projectId=${projectId}`)
-  if (error) return <ErrorMessage title='Failed to load project' error={error} />
+  const [data, error] = useFetch(`/api/project?projectId=${projectId}`)
+  if (error)
+    return <ErrorMessage title='Failed to load project' error={error} />
   if (!data) return null
   const { project } = data
   return (

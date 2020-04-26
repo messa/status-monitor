@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 
 // Inspiration: https://github.com/zeit/micro-proxy/blob/master/index.js
 
-export default async function(req, res) {
+export default async function (req, res) {
   // Note: Websockets support not implemented here
   try {
     const backendUrl = 'http://localhost:8080'
@@ -11,8 +11,8 @@ export default async function(req, res) {
       method: req.method,
       // headers: Object.assign({ 'x-forwarded-host': req.headers.host }, req.headers, { host: url.host }),
       headers: {
-        'cookie': req.headers.cookie,
-        'host': req.headers.host,
+        cookie: req.headers.cookie,
+        host: req.headers.host,
       },
       redirect: 'manual',
     }
@@ -33,7 +33,9 @@ export default async function(req, res) {
       let value = new String(headers[key])
       if (key === 'location' && value.startsWith(backendUrl)) {
         const newValue = value.slice(backendUrl.length)
-        console.debug(`Stripping backend URL from ${key}: ${value} -> ${newValue}`)
+        console.debug(
+          `Stripping backend URL from ${key}: ${value} -> ${newValue}`
+        )
         value = newValue
       }
       console.debug(`Proxy response header: ${key}: ${value}`)
@@ -42,7 +44,7 @@ export default async function(req, res) {
 
     // Stream the proxy response
     proxyRes.body.pipe(res)
-    proxyRes.body.on('error', (err) => {
+    proxyRes.body.on('error', err => {
       console.error(`Error on proxying url: ${newUrl}`)
       console.error(err.stack)
       res.end()

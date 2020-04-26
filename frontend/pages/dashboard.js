@@ -15,15 +15,18 @@ function DashboardPage() {
 }
 
 function ProjectList() {
-  const [ data, error ] = useFetch('/api/projects')
-  if (error) return <ErrorMessage title='Failed to load projects' error={error} />
+  const [data, error] = useFetch('/api/projects')
+  if (error)
+    return <ErrorMessage title='Failed to load projects' error={error} />
   if (!data) return null
   const { projects } = data
   return (
     <ul>
       {projects.map(p => (
         <li key={p.id}>
-          <Link href={{ pathname: '/checks', query: { p: p.id } }}><a>{p.name}</a></Link>
+          <Link href={{ pathname: '/checks', query: { p: p.id } }}>
+            <a>{p.name}</a>
+          </Link>
         </li>
       ))}
     </ul>

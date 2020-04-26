@@ -7,11 +7,11 @@ import Octicon, { ChevronDown } from '@primer/octicons-react'
 import useSWR from 'swr'
 
 const dummyProject = {
-  name: '...'
+  name: '...',
 }
 
 function ProjectChooser({ project, path }) {
-  const [ show, setShow ] = useState(false)
+  const [show, setShow] = useState(false)
   const projectsRes = useSWR(`/api/projects`)
   const { projects } = projectsRes.data || []
   return (
@@ -21,7 +21,12 @@ function ProjectChooser({ project, path }) {
       {show && (
         <div className='dropDown'>
           {projects.map(p => (
-            <Link key={p.id} href={{ path: path || '/overview', query: { p: p.id } }}><a>{p.name}</a></Link>
+            <Link
+              key={p.id}
+              href={{ path: path || '/overview', query: { p: p.id } }}
+            >
+              <a>{p.name}</a>
+            </Link>
           ))}
         </div>
       )}
@@ -40,7 +45,7 @@ function ProjectChooser({ project, path }) {
           position: absolute;
           background-color: #f8f8f8;
           min-width: 160px;
-          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
           z-index: 1;
         }
         .dropDown :global(a) {
@@ -58,14 +63,18 @@ function ProjectChooser({ project, path }) {
 }
 
 function OverviewPage(props) {
-  const { query: { p: projectId } } = useRouter()
+  const {
+    query: { p: projectId },
+  } = useRouter()
   const projectsRes = useSWR(`/api/projects`)
   const { projects } = projectsRes.data || []
   const projectRes = useSWR(`/api/project?projectId=${projectId}`)
   const { project } = projectRes.data || { project: dummyProject }
   return (
     <Layout>
-      <h1><ProjectChooser project={project} /> <b>Overview</b></h1>
+      <h1>
+        <ProjectChooser project={project} /> <b>Overview</b>
+      </h1>
       <pre>{JSON.stringify(projectId)}</pre>
       <pre>{JSON.stringify(project, null, 2)}</pre>
       <pre>{JSON.stringify(projects, null, 2)}</pre>
