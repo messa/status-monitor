@@ -3,11 +3,7 @@
 
 name: Node.js CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -28,6 +24,7 @@ jobs:
 
     - run: cd frontend && npm ci
     - run: cd frontend && npm run build
+    - run: cd frontend && npm run lint
     #- run: cd frontend && npm test
     #  env:
     #    CI: true

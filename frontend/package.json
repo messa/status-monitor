@@ -7,7 +7,7 @@
     "dev": "next",
     "build": "rm -rf out && next build && next export",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "run-p prettier-check lint-eslint",
+    "lint": "npm run prettier-check && npm run lint-eslint",
     "lint-eslint": "eslint . --ext js,jsx,ts,tsx --max-warnings=0",
     "prettier-check": "prettier --check \"**/*.{js,jsx,json,ts,tsx,md,mdx,css,html,yml,yaml,scss}\"",
     "prettier-fix": "prettier --write \"**/*.{js,jsx,json,ts,tsx,md,mdx,css,html,yml,yaml,scss}\""
